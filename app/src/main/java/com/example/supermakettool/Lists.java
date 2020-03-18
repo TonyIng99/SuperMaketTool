@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,8 +26,11 @@ import okhttp3.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.jetbrains.annotations.NotNull;
 
 
 public class Lists extends AppCompatActivity {
@@ -36,10 +40,6 @@ public class Lists extends AppCompatActivity {
     private ListView listview;
     private ArrayList<String> names;
 
-    public interface GetDataCallback {
-        void onGetListData(String List);
-        void onError();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,68 +60,49 @@ public class Lists extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        get_dataList(1, new GetDataCallback(){
-            @Override
-            public void onGetListData(String List) {
-                res = List;
-                flag = true;
-            }
-
-            @Override
-            public void onError() {
-                flag = false;
-            }
-
-        });
-
-
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<ArrayList<TblListsResponse>>(){}.getType();
-        Collection<TblListsResponse> enumlist = gson.fromJson(res, collectionType);
-        TblListsResponse[] arraylist = enumlist.toArray(new TblListsResponse[enumlist.size()]);
-        listview = (ListView) findViewById(R.id.List);
-        names = new ArrayList<String>();
-        names.add("sxasx");
-        names.add("sxasx");
-        names.add("sxasx");
-        names.add(arraylist[0].getListName());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
-        listview.setAdapter(adapter);
+        try {
+            getApiData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
-    protected void get_dataList(int user, final GetDataCallback getDataCallback) {
+    void getApiData() throws IOException {
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient();
+
         Request request = new Request.Builder()
                 .url("https://supermarkettoolswebapi.azurewebsites.net/TblLists")
-                .method("GET", null)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                getDataCallback.onError();
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    getDataCallback.onError();
-                } else {
-                     //res = response.body().string();
-                    getDataCallback.onGetListData(response.body().string());
-                }
+                // ... check for failure using `isSuccessful` before proceeding
+                // Read data on the worker thread
+                final String responseData = response.body().string();
+                // Run view-related code back on the main thread
+                Lists.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createList(responseData);
+                    }
+                });
             }
         });
+
     }
 
 
     public void createList(String json){
 
-        if (json != null){
             Gson gson = new Gson();
             Type collectionType = new TypeToken<ArrayList<TblListsResponse>>(){}.getType();
             Collection<TblListsResponse> enumlist = gson.fromJson(json, collectionType);
@@ -136,13 +117,20 @@ public class Lists extends AppCompatActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
             listview.setAdapter(adapter);
-        }else {
-            listview = (ListView) findViewById(R.id.List);
-            names = new ArrayList<String>();
-            names.add("Lista Inicial");
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
-            listview.setAdapter(adapter);
-        }
+
+
+        listview.setClickable(true);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                //Object o = listView.getItemAtPosition(position);
+                // Realiza lo que deseas, al recibir clic en el elemento de tu listView determinado por su posicion.
+                Log.i("Click", "click en el elemento " + position + " de mi ListView");
+
+            }
+        });
 
     }
 
