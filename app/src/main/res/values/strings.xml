@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SuperMaketTool</string>
+    <string name="title_activity__lists">Activity_Lists</string>
+    <string name="title_activity_lists">Lists</string>
+</resources>
