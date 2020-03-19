@@ -3,4 +3,11 @@
     <string name="title_activity__lists">Activity_Lists</string>
     <string name="title_activity_lists">Lists</string>
     <string name="title_activity_items_list">itemsList</string>
+    <string name="texto_cb">Código de barras</string>
+    <string name="texto_nombre_producto">Nombre del producto</string>
+    <string name="texto_categoria">Categoría</string>
+    <string name="texto_Precio">Precio</string>
+    <string name="texto_um">UM</string>
+    <string name="texto_sm">Super mercado</string>
+    <string name="texto_titulo_add_prod">Agregar Producto</string>
 </resources>
