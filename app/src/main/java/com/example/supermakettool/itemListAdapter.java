@@ -9,18 +9,19 @@ import android.widget.TextView;
 
 public class itemListAdapter extends BaseAdapter {
 
+    String[][] datos;
     public static LayoutInflater inflater = null;
 
     Context context;
 
-    public itemListAdapter(){
-
+    public itemListAdapter(Context context, String[][] datos){
+        this.datos = datos;
         inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return datos.length;
     }
 
     @Override
@@ -40,12 +41,14 @@ public class itemListAdapter extends BaseAdapter {
 
         TextView product = (TextView) view.findViewById(R.id.tv_product);
         TextView quantity = (TextView) view.findViewById(R.id.tv_quantity);
-        TextView product = (TextView) view.findViewById(R.id.tv_pice);
-        TextView product = (TextView) view.findViewById(R.id.tv_um);
+        TextView price = (TextView) view.findViewById(R.id.tv_pice);
+        TextView tv_um = (TextView) view.findViewById(R.id.tv_um);
 
-        
+        product.setText(datos[position][0]);
+        quantity.setText(datos[position][1]);
+        price.setText(datos[position][2]);
+        tv_um.setText(datos[position][3]);
 
-
-        return null;
+        return view;
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/celeste"
     tools:context=".itemsList">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,6 +30,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:srcCompat="@drawable/ic_add_plus" /> />
+        app:srcCompat="@drawable/ic_add_plus" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

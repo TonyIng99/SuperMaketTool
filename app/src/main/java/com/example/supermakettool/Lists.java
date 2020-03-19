@@ -1,5 +1,6 @@
 package com.example.supermakettool;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -36,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 public class Lists extends AppCompatActivity {
 
     public String res;
-    public boolean flag;
     private ListView listview;
     private ArrayList<String> names;
 
@@ -128,6 +128,13 @@ public class Lists extends AppCompatActivity {
                 //Object o = listView.getItemAtPosition(position);
                 // Realiza lo que deseas, al recibir clic en el elemento de tu listView determinado por su posicion.
                 Log.i("Click", "click en el elemento " + position + " de mi ListView");
+
+                Intent siguiente = new Intent(Lists.this, itemsList.class);
+                Bundle extras = new Bundle();
+                extras.putInt("position", position);
+                onPause();
+                startActivity(siguiente);
+
 
             }
         });
