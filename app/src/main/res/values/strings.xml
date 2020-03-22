@@ -12,4 +12,6 @@
     <string name="texto_titulo_add_prod">Agregar Producto</string>
     <string name="texto_titulo_input_box">Nombre de la Lista: </string>
     <string name="Confirm_message"> ¿Desea borrar esta lista? </string>
+    <string name="message_error_pass_user_empty"> Todos los campos son obligatorios </string>
+    <string name="message_credenciales_invalidas"> Usuario o contraseña incorrectos </string>
 </resources>

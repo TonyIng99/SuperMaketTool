@@ -4,16 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,17 +42,66 @@ public class MainActivity extends AppCompatActivity {
         Intent registrar = new Intent(this, Registro.class);
         startActivity(registrar);
     }
+
     public void Principal(View view)
     {
-        Intent principal = new Intent(this, PantallaPrincipal.class );
-        startActivity(principal);
+        try {
+            getApiData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        final String username = et_usuario.getText().toString();
-        final String password = et_password.getText().toString();
-        
        // LoginRequest loginRequest = new LoginRequest(username, password, responsseListener);
        // RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
        // queue.add(loginRequest);
+    }
+
+    void getApiData() throws IOException {
+
+        String url = "https://supermarkettoolswebapi.azurewebsites.net/User/";
+        OkHttpClient client = new OkHttpClient();
+
+        final String username = et_usuario.getText().toString();
+        final String password = et_password.getText().toString();
+
+        if ((!password.isEmpty()) && (!username.isEmpty())){
+
+            url = url + username + "/" + password;
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    // ... check for failure using `isSuccessful` before proceeding
+                    // Read data on the worker thread
+                    final int ok = response.code();
+
+                    // Run view-related code back on the main thread
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (ok ==200) {
+                                Intent principal = new Intent(MainActivity.this, PantallaPrincipal.class);
+                                startActivity(principal);
+                            }else {
+                                Toast.makeText(MainActivity.this, R.string.message_credenciales_invalidas, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+
+        }else {
+            Toast.makeText(MainActivity.this, R.string.message_error_pass_user_empty, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

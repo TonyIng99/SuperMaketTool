@@ -15,7 +15,6 @@ public class PantallaPrincipal extends AppCompatActivity {
     private TextView jugar;
     private TextView supermarkettool;
     private TextView canasta;
-
     private Typeface restaurantmenu;
 
     @Override
