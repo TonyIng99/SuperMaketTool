@@ -6,15 +6,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -50,10 +46,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-       // LoginRequest loginRequest = new LoginRequest(username, password, responsseListener);
-       // RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-       // queue.add(loginRequest);
     }
 
     void getApiData() throws IOException {
@@ -83,12 +75,22 @@ public class MainActivity extends AppCompatActivity {
                     // ... check for failure using `isSuccessful` before proceeding
                     // Read data on the worker thread
                     final int ok = response.code();
+                    final String responseData = response.body().string();
 
                     // Run view-related code back on the main thread
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (ok ==200) {
+                            // Se revisa el estatus del request, si es 200 si existe el usaurio si no nelpasel
+                            if (ok == 200) {
+
+                                //Se creaa una variable superglobal con el id del usuario
+                                Gson gson = new Gson();
+                                UserResponse userdata = gson.fromJson(responseData, UserResponse.class);
+
+                                ((ClaseGlobal) getApplication()).setId_user(userdata.getUserrId());
+
+                                //Se llama a la pantalla de inicio
                                 Intent principal = new Intent(MainActivity.this, PantallaPrincipal.class);
                                 startActivity(principal);
                             }else {

@@ -42,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Lists extends AppCompatActivity {
 
+    public EditText editText;
+    public String listjson;
     public String res;
     private ListView listview;
     private ArrayList<String> names;
@@ -77,10 +79,13 @@ public class Lists extends AppCompatActivity {
 
     void getApiData() throws IOException {
 
+        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists/";
         OkHttpClient client = new OkHttpClient();
 
+        url = url + ((ClaseGlobal) getApplication()).getId_user();
+
         Request request = new Request.Builder()
-                .url("https://supermarkettoolswebapi.azurewebsites.net/TblLists/1")
+                .url(url)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -115,7 +120,10 @@ public class Lists extends AppCompatActivity {
 
             listview = (ListView) findViewById(R.id.List);
             names = new ArrayList<String>();
-            names.add(arraylist[0].getListName());
+
+            for (int i = 0;  i < arraylist.length; i++ ){
+                names.add(arraylist[i].getListName());
+            }
 
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
             listview.setAdapter(adapter);
@@ -174,20 +182,83 @@ public class Lists extends AppCompatActivity {
         TextView txtMessage = (TextView) dialog.findViewById(R.id.txtmessage);
         txtMessage.setText(R.string.texto_titulo_input_box);
         txtMessage.setTextColor(Color.parseColor("#ff2222"));
-        final EditText editText = (EditText) dialog.findViewById(R.id.txtinput);
+        editText = (EditText) dialog.findViewById(R.id.txtinput);
         editText.setText(oldItem);
         Button bt = (Button) dialog.findViewById(R.id.btdone);
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                names.set(index, editText.getText().toString());
-                adapter.notifyDataSetChanged();
+
+                try {
+                    setApiList();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //names.set(index, editText.getText().toString());
+                //(adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
 
         dialog.show();
 
+    }
+
+    void setApiList() throws IOException {
+
+        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists";
+        OkHttpClient client = new OkHttpClient();
+
+        Gson gson = new Gson();
+
+        TblListsResponse newList = new TblListsResponse();
+
+        newList.setListName(editText.getText().toString());
+        newList.setFkUser(((ClaseGlobal) getApplication()).getId_user());
+
+        listjson = gson.toJson(newList);
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, listjson);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                final int ok = response.code();
+
+                // Run view-related code back on the main thread
+                Lists.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        switch (ok){
+                            case 200:
+                                Toast.makeText(Lists.this, R.string.message_Lista_crada, Toast.LENGTH_SHORT).show();
+                                names.add(editText.getText().toString());
+                                adapter.notifyDataSetChanged();
+
+                                break;
+                            default:
+                                Toast.makeText(Lists.this, R.string.message_inesperado, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+            }
+        });
     }
 
 }

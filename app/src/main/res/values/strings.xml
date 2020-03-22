@@ -14,4 +14,8 @@
     <string name="Confirm_message"> ¿Desea borrar esta lista? </string>
     <string name="message_error_pass_user_empty"> Todos los campos son obligatorios </string>
     <string name="message_credenciales_invalidas"> Usuario o contraseña incorrectos </string>
+    <string name="message_usuarioenuso"> Ingrese otro nombre de usuario </string>
+    <string name="message_inesperado"> Ha ocurrido un error inesperado </string>
+    <string name="message_usuario_exito">Su registro se ha completado</string>
+    <string name="message_Lista_crada">Lista creada correctamente</string>
 </resources>

@@ -5,19 +5,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Registro extends AppCompatActivity implements View.OnClickListener {
 
+    public String userjson;
     EditText etnombre, etusuario, etpassword, etedad;
     Button btn_registrar;
 
@@ -39,42 +47,77 @@ public class Registro extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
 
-        final String name=etnombre.getText().toString();
-        final String username=etusuario.getText().toString();
-        final String password=etpassword.getText().toString();
-        final int age=Integer.parseInt(etedad.getText().toString());
+        Gson gson = new Gson();
 
-        Response.Listener<String> respoListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        final String name = etnombre.getText().toString();
+        final String username = etusuario.getText().toString();
+        final String password = etpassword.getText().toString();
+        final int age = Integer.parseInt(etedad.getText().toString());
 
-                try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getBoolean("success");
+        UserResponse newuser = new UserResponse();
 
-                    if(success){
-                        Intent intent = new Intent(Registro.this, MainActivity.class);
-                        Registro.this.startActivity(intent);
+        newuser.setName(name);
+        newuser.setUsername(username);
+        newuser.setPassword(password);
+        newuser.setAge(age);
+        userjson = gson.toJson(newuser);
 
-                    }else
-                    {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Registro.this);
-                        builder.setMessage("Error en el registro")
-                                .setNegativeButton("Retry",null)
-                                .create().show();
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-        //RegisterRequest registerRequest = new RegisterRequest(name, username, age, password, respoListener);
-        //RequestQueue queue = Volley.newRequestQueue(Registro.this);
-        //queue.add(registerRequest);
-
+        try {
+            setApiUser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+    void setApiUser() throws IOException {
+
+        String url = "https://supermarkettoolswebapi.azurewebsites.net/User";
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, userjson);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                final int ok = response.code();
+
+                // Run view-related code back on the main thread
+                Registro.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Se revisa el estatus del request, si es 200 si existe el usaurio si no nelpasel
+                        Intent principal = new Intent(Registro.this, MainActivity.class);
+                        switch (ok){
+                            case 200:
+                                //Se llama a la pantalla de Login
+                                Toast.makeText(Registro.this, R.string.message_usuario_exito, Toast.LENGTH_SHORT).show();
+                                startActivity(principal);
+                                break;
+                            case 400:
+                                Toast.makeText(Registro.this, R.string.message_usuarioenuso, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(Registro.this, R.string.message_inesperado, Toast.LENGTH_SHORT).show();
+                                startActivity(principal);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 }
