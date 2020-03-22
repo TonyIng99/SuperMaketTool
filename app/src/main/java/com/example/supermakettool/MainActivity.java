@@ -1,53 +1,49 @@
 package com.example.supermakettool;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView opciones;
-    private TextView cronometro;
-    private TextView jugar;
-    private TextView supermarkettool;
-    private TextView canasta;
-
-    private Typeface restaurantmenu;
+    EditText et_usuario, et_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String fuente1 = "fuentes/fullpack.ttf";
-        this.restaurantmenu = Typeface.createFromAsset(getAssets(),fuente1);
-
-        supermarkettool = (TextView) findViewById(R.id.textView);
-        supermarkettool.setTypeface(restaurantmenu);
-
-        canasta = (TextView) findViewById(R.id.button9);
-        canasta.setTypeface(restaurantmenu);
-
-        jugar = (TextView) findViewById(R.id.button10);
-        jugar.setTypeface(restaurantmenu);
-
-        cronometro = (TextView) findViewById(R.id.button11);
-        cronometro.setTypeface(restaurantmenu);
-
-        opciones = (TextView) findViewById(R.id.button12);
-        opciones.setTypeface(restaurantmenu);
+        et_usuario = findViewById(R.id.editText);
+        et_password = findViewById(R.id.editText2);
 
     }
-
-
-    public void Siguiente(View view)
+    public void Registrar(View view)
     {
-        Intent siguiente = new Intent(MainActivity.this, Lists.class);
-        onPause();
-        startActivity(siguiente);
+        Intent registrar = new Intent(this, Registro.class);
+        startActivity(registrar);
     }
+    public void Principal(View view)
+    {
+        Intent principal = new Intent(this, PantallaPrincipal.class );
+        startActivity(principal);
+
+        final String username = et_usuario.getText().toString();
+        final String password = et_password.getText().toString();
+        
+       // LoginRequest loginRequest = new LoginRequest(username, password, responsseListener);
+       // RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+       // queue.add(loginRequest);
+    }
+
 }

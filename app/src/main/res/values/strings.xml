@@ -10,4 +10,6 @@
     <string name="texto_um">UM</string>
     <string name="texto_sm">Super mercado</string>
     <string name="texto_titulo_add_prod">Agregar Producto</string>
+    <string name="texto_titulo_input_box">Nombre de la Lista: </string>
+    <string name="Confirm_message"> ¿Desea borrar esta lista? </string>
 </resources>

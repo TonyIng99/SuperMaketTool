@@ -1,11 +1,13 @@
 package com.example.supermakettool;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,7 +31,11 @@ import com.google.gson.reflect.TypeToken;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +45,7 @@ public class Lists extends AppCompatActivity {
     public String res;
     private ListView listview;
     private ArrayList<String> names;
+    private ArrayAdapter<String> adapter;
 
 
     @Override
@@ -53,8 +60,7 @@ public class Lists extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showInputBox("Nuena Lista", 1);
             }
         });
 
@@ -74,7 +80,7 @@ public class Lists extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://supermarkettoolswebapi.azurewebsites.net/TblLists")
+                .url("https://supermarkettoolswebapi.azurewebsites.net/TblLists/1")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -110,12 +116,9 @@ public class Lists extends AppCompatActivity {
 
             listview = (ListView) findViewById(R.id.List);
             names = new ArrayList<String>();
-            names.add("sxasx");
-            names.add("sxasx");
-            names.add("sxasx");
             names.add(arraylist[0].getListName());
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
             listview.setAdapter(adapter);
 
 
@@ -138,6 +141,53 @@ public class Lists extends AppCompatActivity {
 
             }
         });
+
+        listview.setLongClickable(true);
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int pos, long id) {
+
+
+                Log.v("long clicked","pos: " + pos);
+
+                new AlertDialog.Builder(Lists.this)
+                        .setTitle("Title")
+                        .setMessage(R.string.Confirm_message)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(Lists.this, "Yaay", Toast.LENGTH_SHORT).show();
+
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
+                return true;
+            }
+        });
+
+    }
+
+    public void showInputBox(String oldItem, final int index) {
+        final Dialog dialog = new Dialog(Lists.this);
+        dialog.setTitle("Input Box");
+        dialog.setContentView(R.layout.input_box);
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.txtmessage);
+        txtMessage.setText(R.string.texto_titulo_input_box);
+        txtMessage.setTextColor(Color.parseColor("#ff2222"));
+        final EditText editText = (EditText) dialog.findViewById(R.id.txtinput);
+        editText.setText(oldItem);
+        Button bt = (Button) dialog.findViewById(R.id.btdone);
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                names.set(index, editText.getText().toString());
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
 
     }
 

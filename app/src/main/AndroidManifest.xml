@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".AddItem"></activity>
         <activity
             android:name=".itemsList"
@@ -26,12 +27,18 @@
         <activity
             android:name=".Lists"
             android:label="@string/title_activity_lists"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".PantallaPrincipal"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.supermakettool.MainActivity" />
+                android:value="com.example.supermakettool.PantallaPrincipal" />
         </activity>
+
+        <activity android:name=".PantallaPrincipal"></activity>
+
+
+        <activity android:name=".Registro" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +46,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.example.supermakettool;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class itemsList extends AppCompatActivity {
 
@@ -29,8 +32,12 @@ public class itemsList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Intent additemsc = new Intent(itemsList.this, AddItem.class);
+                onPause();
+                startActivity(additemsc);
+
+
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -45,30 +52,75 @@ public class itemsList extends AppCompatActivity {
         listitems = (ListView) findViewById(R.id.lv_items);
 
         String[][] datos = {
-                {"Leche", "1", "249", "L",},
+                {"Lechkjhkjhljkhljkjkhe", "1", "249", "L",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevitlnlknlkjno", "2", "217", "KG",},
+                {"Huevijkjto", "2", "217", "KG",},
+                {"Huevitjbnlllkjytuytruytruytruytrutyro", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
+                {"Huevito", "2", "217", "KG",},
                 {"Huevito", "2", "217", "KG",},
                 {"Pan", "2", "201", "PZA",},
         };
 
         listitems.setAdapter(new itemListAdapter(this, datos));
 
-        listitems.setClickable(true);
-        listitems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        listitems.setLongClickable(true);
+        listitems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                //Object o = listView.getItemAtPosition(position);
-                // Realiza lo que deseas, al recibir clic en el elemento de tu listView determinado por su posicion.
-                Log.i("Click", "click en el elemento " + position + " de mi ListView");
-
-                Intent siguiente = new Intent(itemsList.this, itemsList.class);
-                Bundle extras = new Bundle();
-                extras.putInt("position", position);
-                onPause();
-                startActivity(siguiente);
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int pos, long id) {
 
 
+                Log.v("long clicked","pos: " + pos);
+
+                new AlertDialog.Builder(itemsList.this)
+                        .setTitle("Title")
+                        .setMessage(R.string.Confirm_message)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(itemsList.this, "Yaay", Toast.LENGTH_SHORT).show();
+
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
+                return true;
             }
         });
 
