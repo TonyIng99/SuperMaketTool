@@ -46,7 +46,6 @@ public class PantallaPrincipal extends AppCompatActivity {
     public void Siguiente(View view)
     {
         Intent siguiente = new Intent(PantallaPrincipal.this, Lists.class);
-        onPause();
         startActivity(siguiente);
     }
 }

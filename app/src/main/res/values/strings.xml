@@ -9,6 +9,7 @@
     <string name="texto_Precio">Precio</string>
     <string name="texto_um">UM</string>
     <string name="texto_sm">Super mercado</string>
+    <string name="texto_cantidad">Cantidad</string>
     <string name="texto_titulo_add_prod">Agregar Producto</string>
     <string name="texto_titulo_input_box">Nombre de la Lista: </string>
     <string name="Confirm_message"> ¿Desea borrar esta lista? </string>
@@ -18,4 +19,17 @@
     <string name="message_inesperado"> Ha ocurrido un error inesperado </string>
     <string name="message_usuario_exito">Su registro se ha completado</string>
     <string name="message_Lista_crada">Lista creada correctamente</string>
+    <string name="message_add_Item">Articulo agregado a la Lista correctamente</string>
+    <string name="message_Lista_eliminada">Lista eliminada correctamente</string>
+
+    <string-array name="UM">
+        <item>N/A</item>
+        <item>PZA</item>
+        <item>L</item>
+        <item>Kg</item>
+        <item>M</item>
+    </string-array>
+
 </resources>
+
+

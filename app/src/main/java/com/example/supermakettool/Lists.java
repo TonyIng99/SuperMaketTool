@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +27,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,6 +50,7 @@ public class Lists extends AppCompatActivity {
     private ListView listview;
     private ArrayList<String> names;
     private ArrayAdapter<String> adapter;
+    private TblListsResponse[] arraylist;
 
 
     @Override
@@ -76,7 +79,6 @@ public class Lists extends AppCompatActivity {
 
     }
 
-
     void getApiData() throws IOException {
 
         String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists/";
@@ -96,10 +98,7 @@ public class Lists extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                // ... check for failure using `isSuccessful` before proceeding
-                // Read data on the worker thread
                 final String responseData = response.body().string();
-                // Run view-related code back on the main thread
                 Lists.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -111,22 +110,23 @@ public class Lists extends AppCompatActivity {
     }
 
 
-    public void createList(String json){
+    public void createList(String json) {
 
-            Gson gson = new Gson();
-            Type collectionType = new TypeToken<ArrayList<TblListsResponse>>(){}.getType();
-            Collection<TblListsResponse> enumlist = gson.fromJson(json, collectionType);
-            TblListsResponse[] arraylist = enumlist.toArray(new TblListsResponse[enumlist.size()]);
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<ArrayList<TblListsResponse>>() {
+        }.getType();
+        Collection<TblListsResponse> enumlist = gson.fromJson(json, collectionType);
+        arraylist = enumlist.toArray(new TblListsResponse[enumlist.size()]);
 
-            listview = (ListView) findViewById(R.id.List);
-            names = new ArrayList<String>();
+        listview = (ListView) findViewById(R.id.List);
+        names = new ArrayList<String>();
 
-            for (int i = 0;  i < arraylist.length; i++ ){
-                names.add(arraylist[i].getListName());
-            }
+        for (int i = 0; i < arraylist.length; i++) {
+            names.add(arraylist[i].getListName());
+        }
 
-            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
-            listview.setAdapter(adapter);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+        listview.setAdapter(adapter);
 
 
         listview.setClickable(true);
@@ -134,29 +134,19 @@ public class Lists extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                //Object o = listView.getItemAtPosition(position);
-                // Realiza lo que deseas, al recibir clic en el elemento de tu listView determinado por su posicion.
-                Log.i("Click", "click en el elemento " + position + " de mi ListView");
-
                 Intent siguiente = new Intent(Lists.this, itemsList.class);
                 Bundle extras = new Bundle();
-                extras.putInt("position", position);
-                onPause();
+                extras.putInt("IndexList", arraylist[position].getPkIndexListas());
+                siguiente.putExtras(extras);
                 startActivity(siguiente);
-
-
             }
         });
 
         listview.setLongClickable(true);
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int pos, long id) {
-
-
-                Log.v("long clicked","pos: " + pos);
-
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                final int poition = pos;
                 new AlertDialog.Builder(Lists.this)
                         .setTitle("Title")
                         .setMessage(R.string.Confirm_message)
@@ -164,9 +154,13 @@ public class Lists extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(Lists.this, "Yaay", Toast.LENGTH_SHORT).show();
-
-                            }})
+                                try {
+                                    deleteApiData(poition);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
                         .setNegativeButton(android.R.string.no, null).show();
 
                 return true;
@@ -195,8 +189,6 @@ public class Lists extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                //names.set(index, editText.getText().toString());
-                //(adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
@@ -244,7 +236,7 @@ public class Lists extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        switch (ok){
+                        switch (ok) {
                             case 200:
                                 Toast.makeText(Lists.this, R.string.message_Lista_crada, Toast.LENGTH_SHORT).show();
                                 names.add(editText.getText().toString());
@@ -255,6 +247,51 @@ public class Lists extends AppCompatActivity {
                                 Toast.makeText(Lists.this, R.string.message_inesperado, Toast.LENGTH_SHORT).show();
                         }
 
+                    }
+                });
+            }
+        });
+    }
+
+    void deleteApiData(int position) throws IOException {
+
+        final int pos = position;
+        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists/";
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "");
+
+        url = url + ((ClaseGlobal) getApplication()).getId_user() + "/" + arraylist[pos].getPkIndexListas();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .method("DELETE", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String responseData = response.body().string();
+                final int ok = response.code();
+                Lists.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (ok) {
+                            case 200:
+                                Toast.makeText(Lists.this, R.string.message_Lista_eliminada, Toast.LENGTH_SHORT).show();
+                                names.remove(pos);
+                                adapter.notifyDataSetChanged();
+                                break;
+                            default:
+                                Toast.makeText(Lists.this, R.string.message_inesperado, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
