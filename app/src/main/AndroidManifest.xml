@@ -7,16 +7,17 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
         android:name=".ClaseGlobal"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-        <activity android:name=".AddItem"></activity>
+        <activity android:name=".juego"></activity>
+        <activity android:name=".Ajustes" />
+        <activity android:name=".Cronometro" />
+        <activity android:name=".AddItem" />
         <activity
             android:name=".itemsList"
             android:label="@string/title_activity_items_list"
@@ -35,12 +36,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.supermakettool.PantallaPrincipal" />
         </activity>
-
-        <activity android:name=".PantallaPrincipal"></activity>
-
-
+        <activity android:name=".PantallaPrincipal" />
         <activity android:name=".Registro" />
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,6 +46,9 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".Crono" />
+        <activity android:name=".GameActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

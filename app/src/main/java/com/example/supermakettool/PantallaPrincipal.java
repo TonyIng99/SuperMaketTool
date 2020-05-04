@@ -2,8 +2,10 @@ package com.example.supermakettool;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +18,8 @@ public class PantallaPrincipal extends AppCompatActivity {
     private TextView supermarkettool;
     private TextView canasta;
     private Typeface restaurantmenu;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class PantallaPrincipal extends AppCompatActivity {
 
         canasta = (TextView) findViewById(R.id.button9);
         canasta.setTypeface(restaurantmenu);
+
 
         jugar = (TextView) findViewById(R.id.button10);
         jugar.setTypeface(restaurantmenu);
@@ -47,5 +52,20 @@ public class PantallaPrincipal extends AppCompatActivity {
     {
         Intent siguiente = new Intent(PantallaPrincipal.this, Lists.class);
         startActivity(siguiente);
+    }
+    public void Cronometro(View view)
+    {
+        Intent cronometro = new Intent(PantallaPrincipal.this, Cronometro.class);
+        startActivity(cronometro);
+    }
+    public void Ajustes(View view)
+    {
+        Intent ajustes = new Intent(PantallaPrincipal.this, Ajustes.class);
+        startActivity(ajustes);
+    }
+    public void Juego(View view)
+    {
+        Intent juego = new Intent(PantallaPrincipal.this, juego.class);
+        startActivity(juego);
     }
 }
