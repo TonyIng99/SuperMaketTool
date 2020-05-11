@@ -1,6 +1,7 @@
 package com.example.supermakettool;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,11 +43,16 @@ public class AddItem extends AppCompatActivity {
     EditText et_producto, et_precio, et_cantidad;
     private int indexList;
     private int id_category;
+    ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        layout = (ConstraintLayout)  findViewById(R.id.id_activity_add_item);
+        int i_id = ((ClaseGlobal) getApplication()).getId_backround();
+        layout.setBackgroundResource(i_id);
 
         et_producto = findViewById(R.id.editText);
         et_precio = findViewById(R.id.editText2);

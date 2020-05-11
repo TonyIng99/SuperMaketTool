@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 public class PantallaPrincipal extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class PantallaPrincipal extends AppCompatActivity {
     private TextView supermarkettool;
     private TextView canasta;
     private Typeface restaurantmenu;
-
+    ConstraintLayout layout;
 
 
     @Override
@@ -28,6 +29,10 @@ public class PantallaPrincipal extends AppCompatActivity {
 
         String fuente1 = "fuentes/fullpack.ttf";
         this.restaurantmenu = Typeface.createFromAsset(getAssets(),fuente1);
+
+        layout = (ConstraintLayout)  findViewById(R.id.activity_pantalla_principal);
+        int i_id = ((ClaseGlobal) getApplication()).getId_backround();
+        layout.setBackgroundResource(i_id);
 
         supermarkettool = (TextView) findViewById(R.id.textView);
         supermarkettool.setTypeface(restaurantmenu);

@@ -13,6 +13,8 @@ import com.google.gson.reflect.TypeToken;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +44,18 @@ public class itemsList extends AppCompatActivity {
     TextView textViewTotal;
     private int indexList;
     private ListView listitems;
+    RelativeLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_list);
+
+
+        layout = (RelativeLayout)  findViewById(R.id.id_activity_item_list);
+        int i_id = ((ClaseGlobal) getApplication()).getId_backround();
+        layout.setBackgroundResource(i_id);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         textViewTotal = findViewById(R.id.textView4);

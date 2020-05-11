@@ -11,6 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +53,16 @@ public class Lists extends AppCompatActivity {
     private ArrayList<String> names;
     private ArrayAdapter<String> adapter;
     private TblListsResponse[] arraylist;
-
+    RelativeLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
+
+        layout =  (RelativeLayout) findViewById(R.id.id_activity_lists);
+        int i_id = ((ClaseGlobal) getApplication()).getId_backround();
+        layout.setBackgroundResource(i_id);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -239,8 +245,13 @@ public class Lists extends AppCompatActivity {
                         switch (ok) {
                             case 200:
                                 Toast.makeText(Lists.this, R.string.message_Lista_crada, Toast.LENGTH_SHORT).show();
-                                names.add(editText.getText().toString());
+                                //names.add(editText.getText().toString());
                                 adapter.notifyDataSetChanged();
+                                try {
+                                    getApiData();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
                                 break;
                             default:

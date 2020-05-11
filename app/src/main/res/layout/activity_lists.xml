@@ -21,7 +21,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_lists" />
+    <include
+        android:id="@+id/id_activity_lists"
+        layout="@layout/content_lists" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_list"
