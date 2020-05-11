@@ -1,21 +1,29 @@
 package com.example.supermakettool;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.content.Intent;
 
 public class Cronometro extends AppCompatActivity {
 
     private TextView textoCronometro;
+    ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cronometro);
+
+
+        layout = (ConstraintLayout)  findViewById(R.id.id_activity_cronometro);
+        int i_id = ((ClaseGlobal) getApplication()).getId_backround();
+        layout.setBackgroundResource(i_id);
 
         textoCronometro = (TextView) findViewById(R.id.cronometro);
 
