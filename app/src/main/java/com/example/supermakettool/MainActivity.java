@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     void getApiData() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/User/";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/User/";
         OkHttpClient client = new OkHttpClient();
 
         final String username = et_usuario.getText().toString();

@@ -72,7 +72,7 @@ public class Registro extends AppCompatActivity implements View.OnClickListener 
 
     void setApiUser() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/User";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/User";
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
