@@ -76,7 +76,7 @@ public class AddItem extends AppCompatActivity {
 
     void getApiData() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblCategory";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblCategory";
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -149,7 +149,7 @@ public class AddItem extends AppCompatActivity {
 
     void setApiList() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblItems";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblItems";
         //final String Categorya = spCategorya.getSelectedItem().toString();
         //final int IdCategory = spCategorya.getId();
         final String UM = spUM.getSelectedItem().toString();

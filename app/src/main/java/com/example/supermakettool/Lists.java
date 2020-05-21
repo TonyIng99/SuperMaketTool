@@ -87,7 +87,7 @@ public class Lists extends AppCompatActivity {
 
     void getApiData() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists/";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblLists/";
         OkHttpClient client = new OkHttpClient();
 
         url = url + ((ClaseGlobal) getApplication()).getId_user();
@@ -205,7 +205,7 @@ public class Lists extends AppCompatActivity {
 
     void setApiList() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblLists";
         OkHttpClient client = new OkHttpClient();
 
         Gson gson = new Gson();
@@ -267,7 +267,7 @@ public class Lists extends AppCompatActivity {
     void deleteApiData(int position) throws IOException {
 
         final int pos = position;
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblLists/";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblLists/";
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");

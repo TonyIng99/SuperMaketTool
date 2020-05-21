@@ -95,7 +95,7 @@ public class itemsList extends AppCompatActivity {
 
     void getApiData() throws IOException {
 
-        String url = "https://supermarkettoolswebapi.azurewebsites.net/TblItems/";
+        String url = "https://supermarkettoolswebapi1.azurewebsites.net/TblItems/";
         OkHttpClient client = new OkHttpClient();
 
         url = url + ((ClaseGlobal) getApplication()).getId_user() + "/" + indexList;
